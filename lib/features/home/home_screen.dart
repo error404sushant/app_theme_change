@@ -2,8 +2,10 @@ import 'package:app_theme_change/features/app_provider/app_tehem_provider.dart';
 import 'package:app_theme_change/util/app_common_method/app_device_util.dart';
 import 'package:app_theme_change/util/app_common_method/app_formater.dart';
 import 'package:app_theme_change/util/app_common_method/app_validator.dart';
+import 'package:app_theme_change/util/theme/custom_text_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'home_bloc.dart';
 
@@ -39,15 +41,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   //region Body
 Widget body(){
-    return Column(
+    return ListView(
+      physics: AlwaysScrollableScrollPhysics(),
+      shrinkWrap: true,
       children: [
-        Container(height: 100,width: 100,color: Colors.green,),
-        Text("Display large",style: Theme.of(context).textTheme.displayLarge,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(height: 100.h,width: 100.w,color: Colors.green,),
+
+            Container(height: 100,width: 100,color: Colors.green,),
+          ],
+        ),
+        Text("Hello",style: Theme.of(context).textTheme.displayLarge,),
+        Text("Hello",style: Theme.of(context).textTheme.titleExtraLarge(context),),
         Text("Ram ram",style: Theme.of(context).textTheme.headlineLarge,),
         CupertinoButton(child: Text("Switch theme",style: Theme.of(context).textTheme.bodyMedium,), onPressed: (){
           Provider.of<AppThemeProvider>(context, listen: false).toggleTheme(context: context);
-          AppDeviceUtil.vibrate();
-
         }),
         Form(
           key: homeBloc.formKey,
@@ -66,7 +76,6 @@ Widget body(){
               ),
               ElevatedButton(onPressed: (){
                 homeBloc.onChangeText();
-                AppDeviceUtil.vibrate();
               }, child: Text("Check"))
             ],
           ),
