@@ -22,6 +22,7 @@ samples, guidance on mobile development, and a full API reference.
 5. App icon
 6. Form validation
 7. Hive local db
+8. Custom text theme.
 
 Up coming
 

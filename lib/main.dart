@@ -1,19 +1,26 @@
-import 'dart:io';
 import 'package:app_theme_change/features/app.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+// import 'dart:io' show Platform;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  var path = Directory.current.path;
-  // Initialize Hive
-  Hive.init(path); // Initialization for Hive
-  runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const App(), // Wrap your app
-    ),
-  );
+
+  // Platform check for non-web platforms
+  if (!kIsWeb) {
+    var path = await getApplicationDocumentsDirectory();
+    Hive.init(path.path); // Initialize Hive with the documents directory
+  } else {
+    Hive.init('web_hive'); // Use a fallback for web
+  }
+
+  runApp(kIsWeb
+      ? const App()
+      : DevicePreview(
+          enabled: !kReleaseMode,
+          builder: (context) => const App(), // Wrap your app
+        ));
 }
